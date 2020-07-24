@@ -1,3 +1,4 @@
+import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -37,6 +38,7 @@ addDynamic() {
 }
 
 class Gridviewlist2 extends State<Grid> {
+
   //List<Map<String, String>> get _notes => NoteInheritedWidget.of(context).notes;
   final _postIt = Firestore.instance;
 
@@ -185,7 +187,25 @@ class Gridviewlist2 extends State<Grid> {
          print(_notes);
        });*/
   }
-
+  void initState() {
+    super.initState();
+    BackButtonInterceptor.add(myInterceptor);
+  }
+  void dispose() {
+    BackButtonInterceptor.remove(myInterceptor);
+    super.dispose();
+  }
+  bool myInterceptor(bool stopDefaultButttonEvent,)
+  {
+    if(stopDefaultButttonEvent == false) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => MainPage()),
+      );
+      print(stopDefaultButttonEvent);
+      return true;
+    }
+  }
   @override
 
   //String s,result;
@@ -292,3 +312,4 @@ class _NoteText extends StatelessWidget {
     );
   }
 }
+
