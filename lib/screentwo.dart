@@ -67,6 +67,10 @@ class NotesState extends State<Notes> {
     super.initState();
     BackButtonInterceptor.add(myInterceptor);
         }
+  void dispose() {
+    BackButtonInterceptor.remove(myInterceptor);
+    super.dispose();
+  }
 
   @override
 void backButton() async{
@@ -97,25 +101,21 @@ void backButton() async{
         "updated_by": Variables.currentEmail,
         "category": Variables.notesPage,
       });
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => Grid()),
-      );
             //print(Variables.currentNote);
       //_notes[widget.index] = {'title': title, 'text': text};
     }
-
+ Navigator.push(
+   context,
+   MaterialPageRoute(builder: (context) => Grid()),
+ );
 }
   bool myInterceptor(bool stopDefaultButttonEvent,)
   {
     if(stopDefaultButttonEvent == false) {
       backButton();
       print(stopDefaultButttonEvent);
+      return true;
     }
-    else
-      stopDefaultButttonEvent = true;
-    print(stopDefaultButttonEvent);
-    return true;
   }
   @override
   Widget build(BuildContext context) {
