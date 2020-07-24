@@ -1,5 +1,7 @@
+import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:focused_menu/focused_menu.dart';
 import 'package:focused_menu/modals.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -18,6 +20,22 @@ class ProjectsPage extends StatefulWidget {
 }
 
 class _ProjectsPageState extends State<ProjectsPage> {
+  void initState() {
+    super.initState();
+    BackButtonInterceptor.add(myInterceptor);
+  }
+  void dispose() {
+    BackButtonInterceptor.remove(myInterceptor);
+    super.dispose();
+  }
+  bool myInterceptor(bool stopDefaultButttonEvent,)
+  {
+    if(stopDefaultButttonEvent == false) {
+      SystemNavigator.pop();
+      print(stopDefaultButttonEvent);
+      return true;
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return MaterialApp(theme: Theme.of(context), home: Home());
