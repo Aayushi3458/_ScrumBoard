@@ -95,12 +95,12 @@ class _MyAppState extends State<MainPage> {
             title: Text(
               "Project Code",
               style:
-                  TextStyle(color: Theme.of(context).textTheme.bodyText2.color),
+              TextStyle(color: Theme.of(context).textTheme.bodyText2.color),
             ),
             content: Text(
               Variables.currentProjectCode,
               style:
-                  TextStyle(color: Theme.of(context).textTheme.bodyText2.color),
+              TextStyle(color: Theme.of(context).textTheme.bodyText2.color),
             ),
             actions: <Widget>[
               IconButton(
@@ -112,21 +112,21 @@ class _MyAppState extends State<MainPage> {
                     await _collab
                         .collection("project")
                         .where("project_id",
-                            isEqualTo: Variables.currentProjectId)
+                        isEqualTo: Variables.currentProjectId)
                         .snapshots()
                         .listen((data) => data.documents.forEach((doc) {
-                              setState(() {
-                                G = doc["project_id"];
-                                print(G);
-                                _collab
-                                    .collection("project")
-                                    .document(G)
-                                    .updateData({
-                                  "project_code": y,
-                                });
-                                Variables.currentProjectCode = y;
-                              });
-                            }));
+                      setState(() {
+                        G = doc["project_id"];
+                        print(G);
+                        _collab
+                            .collection("project")
+                            .document(G)
+                            .updateData({
+                          "project_code": y,
+                        });
+                        Variables.currentProjectCode = y;
+                      });
+                    }));
                     Navigator.pop(context);
                     final snackBar = SnackBar(
                       content: Text('Project code has been changed'),
@@ -143,7 +143,7 @@ class _MyAppState extends State<MainPage> {
                   color: Theme.of(context).textTheme.bodyText2.color,
                 ),
                 onPressed: () => Clipboard.setData(
-                    new ClipboardData(text: Variables.currentProjectCode)),
+                    new ClipboardData(text: "Join my project with this code:$Variables.currentProjectCode")),
               )
             ],
           );
@@ -172,7 +172,7 @@ class _MyAppState extends State<MainPage> {
             child: Text(
               Variables.projectCreatedBy,
               style:
-                  Theme.of(context).textTheme.bodyText2.copyWith(fontSize: 18),
+              Theme.of(context).textTheme.bodyText2.copyWith(fontSize: 18),
             ),
           ),
         );
@@ -237,12 +237,12 @@ class _MyAppState extends State<MainPage> {
             title: Text(
               "Remove this Collaborator?",
               style:
-                  TextStyle(color: Theme.of(context).textTheme.bodyText2.color),
+              TextStyle(color: Theme.of(context).textTheme.bodyText2.color),
             ),
             content: Text(
               collaboratorName,
               style:
-                  TextStyle(color: Theme.of(context).textTheme.bodyText2.color),
+              TextStyle(color: Theme.of(context).textTheme.bodyText2.color),
             ),
             actions: <Widget>[
               MaterialButton(
@@ -253,23 +253,23 @@ class _MyAppState extends State<MainPage> {
                   await _collab
                       .collection("project")
                       .where("project_id",
-                          isEqualTo: Variables.currentProjectId)
+                      isEqualTo: Variables.currentProjectId)
                       .snapshots()
                       .listen((data) => data.documents.forEach((doc) {
-                            setState(() {
-                              C = doc["project_id"];
-                              print(C);
-                              _collab
-                                  .collection("project")
-                                  .document(C)
-                                  .updateData({
-                                "collaborators":
-                                    FieldValue.arrayRemove([collaboratorName])
-                              });
-                            });
-                          }));
+                    setState(() {
+                      C = doc["project_id"];
+                      print(C);
+                      _collab
+                          .collection("project")
+                          .document(C)
+                          .updateData({
+                        "collaborators":
+                        FieldValue.arrayRemove([collaboratorName])
+                      });
+                    });
+                  }));
                   //Get.to(ProjectsPage());
-                 /* Navigator.push(
+                  /* Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => ProjectsPage()),
                   );*/
