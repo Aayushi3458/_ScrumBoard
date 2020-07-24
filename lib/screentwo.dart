@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:flutter_icons/flutter_icons.dart';
 import 'package:mainpage/Classroom_Page.dart';
 import 'package:random_string/random_string.dart';
 import 'dart:math' show Random;
@@ -63,18 +64,12 @@ class NotesState extends State<Notes> {
   var b=randomNumeric(6);
   @override
   void initState() {
-    BackButtonInterceptor.add(myInterceptor);
     super.initState();
-  }
-
+    BackButtonInterceptor.add(myInterceptor);
+        }
 
   @override
-  void dispose() {
-    BackButtonInterceptor.remove(myInterceptor);
-    super.dispose();
-  }
 void backButton() async{
-  BackButtonInterceptor.add(myInterceptor);
  String title = _titleController.text;
   String text = _contentController.text;
     if (widget?.notemode == Notemode.Adding) {
@@ -111,18 +106,17 @@ void backButton() async{
     }
 
 }
-  bool myInterceptor(bool stopDefaultButtonEvent)
+  bool myInterceptor(bool stopDefaultButttonEvent,)
   {
-    backButton();
-
-    print("BACK BUTTON!");
-    print(stopDefaultButtonEvent);
-      return true;
-  }  // Do some stuff.
-
- /* var title;
-  var text;*/
-
+    if(stopDefaultButttonEvent == false) {
+      backButton();
+      print(stopDefaultButttonEvent);
+    }
+    else
+      stopDefaultButttonEvent = true;
+    print(stopDefaultButttonEvent);
+    return true;
+  }
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
