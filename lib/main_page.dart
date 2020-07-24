@@ -1,3 +1,4 @@
+import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -15,6 +16,25 @@ class MainPage extends StatefulWidget {
 }
 
 class _MyAppState extends State<MainPage> {
+  void initState() {
+    super.initState();
+    BackButtonInterceptor.add(myInterceptor);
+  }
+  void dispose() {
+    BackButtonInterceptor.remove(myInterceptor);
+    super.dispose();
+  }
+  bool myInterceptor(bool stopDefaultButttonEvent,)
+  {
+    if(stopDefaultButttonEvent == false) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => ProjectsPage()),
+      );
+      print(stopDefaultButttonEvent);
+      return true;
+    }
+  }
   String displayText;
   Widget navList({IconData icon, String text, GestureTapCallback onTap}) {
     return ListTile(
