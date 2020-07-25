@@ -75,11 +75,11 @@ class _HomeState extends State<Home> {
             title: Text(
               "Join Project",
               style:
-              TextStyle(color: Theme.of(context).textTheme.bodyText2.color),
+                  TextStyle(color: Theme.of(context).textTheme.bodyText2.color),
             ),
             content: TextField(
               style:
-              TextStyle(color: Theme.of(context).textTheme.bodyText2.color),
+                  TextStyle(color: Theme.of(context).textTheme.bodyText2.color),
               controller: myController,
               decoration: InputDecoration(
                 hintText: "Project code",
@@ -91,22 +91,22 @@ class _HomeState extends State<Home> {
                 child: Text("Join"),
                 onPressed: () async{
                   await _project
-                      .collection("project")
-                      .where("project_code", isEqualTo: myController.text).snapshots().listen((data)=>data.documents.forEach((doc) {
+                  .collection("project")
+                  .where("project_code", isEqualTo: myController.text).snapshots().listen((data)=>data.documents.forEach((doc) {
                     setState(() {
-                      S=doc["project_id"];
-                      print(S);
-                      _project.collection("project").document(S).updateData({"collaborators": FieldValue.arrayUnion([Variables.currentEmail])});
+                    S=doc["project_id"];
+                    print(S);
+                    _project.collection("project").document(S).updateData({"collaborators": FieldValue.arrayUnion([Variables.currentEmail])});
                     });
                   }));
-                  Navigator.of(context).pop();
+          Navigator.of(context).pop();
                 },
               )
             ],
           );
         });
   }
-  var f=randomNumeric(8);
+var f=randomNumeric(8);
   Future<String> createNewProject(BuildContext context) {
     return showDialog(
         context: context,
@@ -115,7 +115,7 @@ class _HomeState extends State<Home> {
             title: Text(
               "Create Project",
               style:
-              TextStyle(color: Theme.of(context).textTheme.bodyText2.color),
+                  TextStyle(color: Theme.of(context).textTheme.bodyText2.color),
             ),
             content: Column(
               mainAxisSize: MainAxisSize.min,
@@ -153,87 +153,68 @@ class _HomeState extends State<Home> {
 
   List<Widget> projectList = [];
   Widget offsetPopup() => PopupMenuButton<int>(
-    itemBuilder: (context) => [
-      PopupMenuItem(
-        value: 1,
-        child: FlatButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-            createNewProject(context).then((onValue) {});
-          },
-          child: Text(
-            "Create Project",
+        itemBuilder: (context) => [
+          PopupMenuItem(
+            value: 1,
+            child: FlatButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                createNewProject(context).then((onValue) {});
+              },
+              child: Text(
+                "Create Project",
+              ),
+            ),
           ),
-        ),
-      ),
-      PopupMenuItem(
-        value: 2,
-        child: FlatButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-            joinExistingProject(context).then((onValue) {});
-          },
-          child: Text(
-            "Join Project",
+          PopupMenuItem(
+            value: 2,
+            child: FlatButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                joinExistingProject(context).then((onValue) {});
+              },
+              child: Text(
+                "Join Project",
+              ),
+            ),
           ),
-        ),
-      ),
-    ],
-    icon: Icon(Icons.add),
-    offset: Offset(0, 100),
-  );
+        ],
+        icon: Icon(Icons.add),
+        offset: Offset(0, 100),
+      );
   final _scaffoldKey = GlobalKey<ScaffoldState>();
-var g;
   Widget card(String text,String projectCode,String createdBy, List<dynamic> collaborators, String projectId) {
     myController.text = "";
-
     return Card(
       child: Container(
         decoration:BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(8.0))
+          borderRadius: BorderRadius.all(Radius.circular(8.0))
         ),
         child: FocusedMenuHolder(
-
           blurSize: 10,
-          menuWidth: MediaQuery.of(context).size.width * 0.8,
+          menuWidth: MediaQuery.of(context).size.width * 0.5,
           menuItemExtent: 50,
           duration: Duration(milliseconds: 300),
           menuItems: <FocusedMenuItem>[
             FocusedMenuItem(
                 title: Text(
-                  Variables.currentEmail==createdBy?
-                  'Delete Project':'Leave Project',
+                  'Delete',
                   style: Theme.of(context).appBarTheme.textTheme.headline6.copyWith(color:Colors.red),
                 ),
                 trailingIcon: Icon(
                   Icons.delete,
                   color: Colors.red,
                 ),
-                onPressed: () async { if(Variables.currentEmail==createdBy) {
-                  await _project.collection("project").document(projectId).delete();
-                }
-                else if (Variables.currentEmail!=createdBy){//Navigator.of(context).pop();
-                  await _project
-                      .collection("project")
-                      .where("project_id",
-                      isEqualTo: Variables.currentProjectId)
-                      .snapshots()
-                      .listen((data) => data.documents.forEach((doc) {
-                    setState(() {
-                      g = doc["project_id"];
-                      print(g);
-                      _project
-
-                          .collection("project")
-                          .document(g)
-                          .updateData({
-                        "collaborators": FieldValue.arrayRemove(
-                            [Variables.currentEmail])
-                      });
-                    });
-                  }));
-                }
-                })
+          onPressed: () async { if(Variables.currentEmail==createdBy) {
+            await _project.collection("project").document(projectId).delete();
+          }
+          else{
+            final snackBar = SnackBar(
+              content: Text('You cannot delete this Project'),
+            );
+            _scaffoldKey.currentState.showSnackBar(snackBar);
+          }
+    })
           ],
           //color: Theme.of(context).buttonColor,
           onPressed: () {
@@ -310,19 +291,19 @@ var g;
                 ),
               ),
               navList(
-                  icon: Icons.exit_to_app,
-                  text: 'LOGOUT',
-                  onTap: () async{
-                    Variables.currentEmail="";
-                    SharedPreferences prefs = await SharedPreferences.getInstance();
-                    prefs.remove('email');
-                    Navigator.pushReplacement(context,
-                        MaterialPageRoute(builder: (BuildContext ctx) => LoginPage()));
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context)=> LoginPage()),
-                    );
-                  }
+                icon: Icons.exit_to_app,
+                text: 'LOGOUT',
+                onTap: () async{
+                  Variables.currentEmail="";
+                  SharedPreferences prefs = await SharedPreferences.getInstance();
+                  prefs.remove('email');
+                  Navigator.pushReplacement(context,
+                      MaterialPageRoute(builder: (BuildContext ctx) => LoginPage()));
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context)=> LoginPage()),
+                  );
+                }
               ),
             ],
           ),
@@ -336,27 +317,27 @@ var g;
               child: ListView(
                 shrinkWrap:true,
                 children: <Widget>[
-                  new StreamBuilder(
-                    stream: _project
-                        .collection("project")
-                        .where("created_by", isEqualTo: Variables.currentEmail)
-                        .snapshots(),
-                    builder: (context, snapshot) {
-                      if (!snapshot.hasData) {
-                        return Text(
-                          'No Data...',
-                        );
-                      } else {
-                        var lists = snapshot.data.documents;
-                        return ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: lists.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              return card(lists[index]["project_name"],lists[index]["project_code"],lists[index]["created_by"],lists[index]["collaborators"],lists[index]["project_id"]);
-                            });
-                      }
-                    },
-                  ),
+                 new StreamBuilder(
+                   stream: _project
+                       .collection("project")
+                       .where("created_by", isEqualTo: Variables.currentEmail)
+                       .snapshots(),
+                   builder: (context, snapshot) {
+                     if (!snapshot.hasData) {
+                       return Text(
+                         'No Data...',
+                       );
+                     } else {
+                       var lists = snapshot.data.documents;
+                       return ListView.builder(
+                           shrinkWrap: true,
+                           itemCount: lists.length,
+                           itemBuilder: (BuildContext context, int index) {
+                             return card(lists[index]["project_name"],lists[index]["project_code"],lists[index]["created_by"],lists[index]["collaborators"],lists[index]["project_id"]);
+                           });
+                     }
+                   },
+                 ),
                   new StreamBuilder(
                     stream: _project
                         .collection("project")
@@ -378,7 +359,7 @@ var g;
                       }
                     },
                   ),
-                ],
+        ],
               ),
             ),
           ),
